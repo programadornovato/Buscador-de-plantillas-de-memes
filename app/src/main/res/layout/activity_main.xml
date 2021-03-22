@@ -80,5 +80,18 @@
         android:textColorLink="@color/primaryColor"
         tools:text="https://i.imgur.com/D2zw1aV.jpg"/>
 
+    <WebView
+        android:id="@+id/webResultados"
+        android:layout_width="306dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/uploadImageButton"
+        app:layout_constraintVertical_bias="0.106" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

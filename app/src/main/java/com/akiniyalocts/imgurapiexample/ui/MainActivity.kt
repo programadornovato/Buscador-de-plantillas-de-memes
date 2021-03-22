@@ -7,9 +7,14 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.webkit.URLUtil
+import android.webkit.WebView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
@@ -33,7 +38,7 @@ class MainActivity : AppCompatActivity() {
      */
     private var cropActivityResultContract = object : ActivityResultContract<Any?, Uri?>(){
         override fun createIntent(context: Context, input: Any?): Intent {
-            return CropImage.activity().setAspectRatio(16,9).getIntent(this@MainActivity)
+            return CropImage.activity().getIntent(this@MainActivity)
         }
         override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
             return CropImage.getActivityResult(intent)?.uri
@@ -49,6 +54,25 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(binding.root)
         var uploadImageButton=findViewById<Button>(R.id.uploadImageButton)
+        var webResultados=findViewById<WebView>(R.id.webResultados)
+        var resultsLink=findViewById<TextView>(R.id.resultsLink)
+        resultsLink.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                var resultado=resultsLink.text.toString()
+                if(URLUtil.isValidUrl(resultado)==true){
+                    resultado="https://images.google.com/searchbyimage?image_url=${resultado}"
+                    webResultados.visibility=View.VISIBLE
+                    webResultados.clearCache(true)
+                    webResultados.settings.javaScriptEnabled=true
+                    webResultados.loadUrl(resultado)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
         cropActivityResultLauncher = registerForActivityResult(cropActivityResultContract) {
             it?.let {
                 uploadImageButton.isEnabled=true
